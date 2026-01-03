@@ -148,12 +148,6 @@ func (sf *rawProgressFormatter) formatProgress(id, action string, progress *json
 	return []byte(action + " " + out + endl)
 }
 
-// NewProgressOutput returns a progress.Output object that can be passed to
-// progress.NewProgressReader.
-func NewProgressOutput(out io.Writer) progress.Output {
-	return &progressOutput{sf: &rawProgressFormatter{}, out: out, newLines: true}
-}
-
 // NewJSONProgressOutput returns a progress.Output that formats output
 // using JSON objects
 func NewJSONProgressOutput(out io.Writer, newLines bool) progress.Output {

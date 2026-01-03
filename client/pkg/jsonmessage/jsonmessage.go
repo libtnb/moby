@@ -11,7 +11,6 @@ import (
 
 	"github.com/docker/go-units"
 	"github.com/moby/moby/api/types/jsonstream"
-	"github.com/moby/term"
 )
 
 var timeNow = time.Now // For overriding in tests.
@@ -186,12 +185,6 @@ func DisplayJSONMessagesStream(in io.Reader, out io.Writer, terminalFd uintptr, 
 func DisplayJSONMessages(messages JSONMessagesStream, out io.Writer, terminalFd uintptr, isTerminal bool, auxCallback func(jsonstream.Message)) error {
 	ids := make(map[string]uint)
 	var width uint16 = 200
-	if isTerminal {
-		ws, err := term.GetWinsize(terminalFd)
-		if err == nil {
-			width = ws.Width
-		}
-	}
 
 	for jm, err := range messages {
 		var diff uint

@@ -12,8 +12,6 @@ import (
 
 	"github.com/docker/go-connections/sockets"
 	"github.com/docker/go-connections/tlsconfig"
-	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
-	"go.opentelemetry.io/otel/trace"
 )
 
 type clientConfig struct {
@@ -54,9 +52,6 @@ type clientConfig struct {
 	// If both manualAPIVersion and envAPIVersion are set, manualAPIVersion
 	// takes precedence. Either field disables API-version negotiation.
 	envAPIVersion string
-
-	// traceOpts is a list of options to configure the tracing span.
-	traceOpts []otelhttp.Option
 }
 
 // Opt is a configuration option to initialize a [Client].
@@ -322,20 +317,6 @@ func WithVersionFromEnv() Opt {
 // or [WithAPIVersionFromEnv] to disable API version negotiation.
 func WithAPIVersionNegotiation() Opt {
 	return func(c *clientConfig) error {
-		return nil
-	}
-}
-
-// WithTraceProvider sets the trace provider for the client.
-// If this is not set then the global trace provider is used.
-func WithTraceProvider(provider trace.TracerProvider) Opt {
-	return WithTraceOptions(otelhttp.WithTracerProvider(provider))
-}
-
-// WithTraceOptions sets tracing span options for the client.
-func WithTraceOptions(opts ...otelhttp.Option) Opt {
-	return func(c *clientConfig) error {
-		c.traceOpts = append(c.traceOpts, opts...)
 		return nil
 	}
 }
